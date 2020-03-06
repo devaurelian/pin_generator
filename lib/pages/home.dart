@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pingenerator/pages/settings.dart';
+import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
 
 enum OverflowMenuItem { settings, rate, help }
@@ -19,10 +20,35 @@ class _HomePageState extends State<HomePage> {
   final random = Random.secure();
   int _pin = 0;
 
+  int _pinDigitCount = 4;
+  int _backDigitCount = 1000;
+
+  int next(int min, int max) => min + random.nextInt(max - min);
+
   void _refreshPIN() {
     setState(() {
-      _pin = random.nextInt(10000);
+//      _pin = random.nextInt(10000);
+      _pin = next(pow(10, _pinDigitCount - 1), pow(10, _pinDigitCount));
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadSettings();
+  }
+
+  Future<void> loadSettings() async {
+    print('Home - loadSettings');
+
+    int pinDigitCount = await SettingsProvider.getPinDigitCount();
+    int backDigitCount = await SettingsProvider.getBackDigitCount();
+    setState(() {
+      _pinDigitCount = pinDigitCount;
+      _backDigitCount = backDigitCount;
+    });
+    _refreshPIN();
   }
 
   void popupMenuSelection(OverflowMenuItem item) {
@@ -31,7 +57,9 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SettingsScreen()),
-        );
+        ).then((value) {
+          loadSettings();
+        });
         break;
       case OverflowMenuItem.rate:
         break;
@@ -74,6 +102,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           RandomDigits(
             random: random,
+            backDigitCount: _backDigitCount,
           ),
           Center(
             child: Text(
