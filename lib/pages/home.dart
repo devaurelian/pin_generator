@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pingenerator/pages/settings.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
+
+enum OverflowMenuItem { settings, rate, help }
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -22,6 +25,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void popupMenuSelection(OverflowMenuItem item) {
+    switch (item) {
+      case OverflowMenuItem.settings:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingsScreen()),
+        );
+        break;
+      case OverflowMenuItem.rate:
+        break;
+      case OverflowMenuItem.help:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,15 +51,19 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Copy to clipboard',
             onPressed: () {},
           ),
-          PopupMenuButton(
+          PopupMenuButton<OverflowMenuItem>(
+            onSelected: popupMenuSelection,
             itemBuilder: (_) => [
               PopupMenuItem(
+                value: OverflowMenuItem.settings,
                 child: Text('Settings'),
               ),
               PopupMenuItem(
+                value: OverflowMenuItem.rate,
                 child: Text('Rate app'),
               ),
               PopupMenuItem(
+                value: OverflowMenuItem.help,
                 child: Text('Help'),
               ),
             ],
