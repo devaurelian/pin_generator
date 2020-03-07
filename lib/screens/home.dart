@@ -1,51 +1,57 @@
-import 'dart:io';
+// Copyright 2020 anaurelian. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pingenerator/pages/settings_screen.dart';
+import 'package:pingenerator/screens/settings.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/utils/utils.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
 import 'package:pingenerator/utils/strings.dart';
 import 'package:share/share.dart';
 
+/// Overflow menu items enumeration.
 enum OverflowMenuItem { settings, rate, help }
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
+/// The Home screen widget.
+class HomeScreen extends StatefulWidget {
   final String title;
 
+  HomeScreen({Key key, this.title}) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final random = Random.secure();
+
+  /// The current generated PIN.
   int _pin = 0;
 
-  int _pinDigitCount = 4;
-  int _backDigitCount = 1000;
+  /// The PIN digit count.
+  int _pinDigitCount = SettingsProvider.pinDigitCountDefault;
+
+  /// The background digit count.
+  int _backDigitCount = SettingsProvider.backDigitCountDefault;
 
   /// The AppBar's action needs this key to find its own Scaffold.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  /// Load settings and refresh PIN and digits on [initState].
   @override
   void initState() {
     super.initState();
-
-    loadSettings();
+    loadSettingsAndRefresh();
   }
 
-  Future<void> loadSettings() async {
-    print('Home - loadSettings');
-
-    int pinDigitCount = await SettingsProvider.getPinDigitCount();
-    int backDigitCount = await SettingsProvider.getBackDigitCount();
-    setState(() {
-      _pinDigitCount = pinDigitCount;
-      _backDigitCount = backDigitCount;
-    });
+  /// Loads the app settings from persistent storage and generate a new PIN and
+  /// random digits based on the loaded settings.
+  Future<void> loadSettingsAndRefresh() async {
+    _pinDigitCount = await SettingsProvider.getPinDigitCount();
+    _backDigitCount = await SettingsProvider.getBackDigitCount();
     _refreshPIN();
   }
 
@@ -76,12 +82,8 @@ class _HomePageState extends State<HomePage> {
   void popupMenuSelection(OverflowMenuItem item) {
     switch (item) {
       case OverflowMenuItem.settings:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingsScreen()),
-        ).then((value) {
-          loadSettings();
-        });
+        // Navigate to the Settings screen, and load settings and refresh on return
+        loadSettingsScreen();
         break;
       case OverflowMenuItem.rate:
         // Launch the Google Play Store page to allow the user to rate the app
@@ -92,6 +94,13 @@ class _HomePageState extends State<HomePage> {
         launchUrl(_scaffoldKey.currentState, Strings.helpURL);
         break;
     }
+  }
+
+  /// Navigates to the Settings screen, and loads settings and refreshes on return.
+  Future<void> loadSettingsScreen() async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+    loadSettingsAndRefresh();
   }
 
   /// Describes the main ([Scaffold]) part of the app user interface.
@@ -135,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           RandomDigits(
             random: random,
-            backDigitCount: _backDigitCount,
+            digitCount: _backDigitCount,
           ),
           Center(
             child: Text(

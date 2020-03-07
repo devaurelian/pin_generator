@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pingenerator/pages/home.dart';
+import 'package:pingenerator/screens/home.dart';
 
 void main() => runApp(PINGeneratorApp());
 
@@ -9,7 +9,7 @@ class PINGeneratorApp extends StatelessWidget {
     return MaterialApp(
       title: 'PIN Generator',
       debugShowCheckedModeBanner: false,
-      home: HomePage(title: 'PIN Generator'),
+      home: HomeScreen(title: 'PIN Generator'),
     );
   }
 }
