@@ -14,7 +14,7 @@ class SettingsProvider {
   /// The min, max and default values for the background digit count setting.
   static const int backDigitCountMin = 0;
   static const int backDigitCountMax = 1000;
-  static const int backDigitCountDefault = 1000;
+  static const int backDigitCountDefault = 100;
 
   /// Persistent storage keys.
   static final String _pinDigitCountKey = 'pin_digit_count';

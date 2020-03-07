@@ -7,6 +7,7 @@ import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/utils/utils.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
 import 'package:pingenerator/utils/strings.dart';
+import 'package:share/share.dart';
 
 enum OverflowMenuItem { settings, rate, help }
 
@@ -29,22 +30,6 @@ class _HomePageState extends State<HomePage> {
   /// The AppBar's action needs this key to find its own Scaffold.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  /// Generates and displays a new PIN.
-  ///
-  /// Called on startup and when the user taps the _Refresh_ floating action button.
-  void _refreshPIN() {
-    setState(() {
-      _pin = random.nextIntOfDigits(_pinDigitCount);
-    });
-  }
-
-  /// Copies the current PIN to the clipboard.
-  ///
-  /// Called when the user taps the _Copy_ action button.
-  void _copyPIN() {
-    copyToClipboard(_scaffoldKey.currentState, _pin.toString());
-  }
-
   @override
   void initState() {
     super.initState();
@@ -64,6 +49,30 @@ class _HomePageState extends State<HomePage> {
     _refreshPIN();
   }
 
+  /// Generates and displays a new PIN.
+  ///
+  /// Called on startup and when the user taps the floating action button.
+  void _refreshPIN() {
+    setState(() {
+      _pin = random.nextIntOfDigits(_pinDigitCount);
+    });
+  }
+
+  /// Shares the current PIN.
+  ///
+  /// Called when the user taps the _Share_ action button.
+  void _sharePIN() {
+    Share.share(_pin.toString(), subject: Strings.shareSubject);
+  }
+
+  /// Copies the current PIN to the clipboard.
+  ///
+  /// Called when the user taps the _Copy_ action button.
+  void _copyPIN() {
+    copyToClipboard(_scaffoldKey.currentState, _pin.toString());
+  }
+
+  /// Performs the tasks of the overflow menu items.
   void popupMenuSelection(OverflowMenuItem item) {
     switch (item) {
       case OverflowMenuItem.settings:
@@ -75,12 +84,17 @@ class _HomePageState extends State<HomePage> {
         });
         break;
       case OverflowMenuItem.rate:
+        // Launch the Google Play Store page to allow the user to rate the app
+        launchUrl(_scaffoldKey.currentState, Strings.rateAppURL);
         break;
       case OverflowMenuItem.help:
+        // Launch the app online help url
+        launchUrl(_scaffoldKey.currentState, Strings.helpURL);
         break;
     }
   }
 
+  /// Describes the main ([Scaffold]) part of the app user interface.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +102,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.share),
+            tooltip: Strings.shareTooltip,
+            onPressed: _sharePIN,
+          ),
           IconButton(
             icon: const Icon(Icons.content_copy),
             tooltip: Strings.copyTooltip,
@@ -98,15 +117,15 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (_) => [
               PopupMenuItem(
                 value: OverflowMenuItem.settings,
-                child: Text('Settings'),
+                child: Text(Strings.settingsMenuItem),
               ),
               PopupMenuItem(
                 value: OverflowMenuItem.rate,
-                child: Text('Rate app'),
+                child: Text(Strings.rateAppMenuItem),
               ),
               PopupMenuItem(
                 value: OverflowMenuItem.help,
-                child: Text('Help'),
+                child: Text(Strings.helpMenuItem),
               ),
             ],
           ),

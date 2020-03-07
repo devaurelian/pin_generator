@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pingenerator/utils/strings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 extension RandomOfDigits on Random {
   /// Generates a non-negative random integer with a specified number of digits.
@@ -36,5 +37,16 @@ Future<void> copyToClipboard(ScaffoldState scaffoldState, String text) async {
     showSnackBar(scaffoldState, Strings.copiedMessage);
   } catch (error) {
     print('${Strings.copiedError} $error');
+  }
+}
+
+/// Launches the specified [URL] in the mobile platform.
+///
+/// Shows a [SnackBar] if there is no support for launching the URL.
+Future<void> launchUrl(ScaffoldState scaffoldState, String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    showSnackBar(scaffoldState, '${Strings.urlError} $url');
   }
 }
