@@ -149,9 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Center(
             child: Text(
               _pin.toString(),
-              style: Theme.of(context).textTheme.display4.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
+              style: _pinDigitCount <= 5
+                  ? Theme.of(context).textTheme.display4
+                  : Theme.of(context).textTheme.display3,
             ),
           ),
         ],
