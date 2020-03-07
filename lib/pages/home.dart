@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pingenerator/pages/settings.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/utils/utils.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
+import 'package:pingenerator/utils/strings.dart';
 
 enum OverflowMenuItem { settings, rate, help }
 
@@ -25,16 +26,30 @@ class _HomePageState extends State<HomePage> {
   int _pinDigitCount = 4;
   int _backDigitCount = 1000;
 
-  // The AppBar's action needs this key to find its own Scaffold.
+  /// The AppBar's action needs this key to find its own Scaffold.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  int next(int min, int max) => min + random.nextInt(max - min);
-
+  /// Generates and displays a new PIN.
+  ///
+  /// Called on startup and when the user taps the _Refresh_ floating action button.
   void _refreshPIN() {
     setState(() {
-//      _pin = random.nextInt(10000);
-      _pin = next(pow(10, _pinDigitCount - 1), pow(10, _pinDigitCount));
+      _pin = random.nextIntOfDigits(_pinDigitCount);
     });
+
+//    final StringBuffer buffer = StringBuffer();
+//    for (var i = 0; i < 1000; i++) {
+//      print(random.nextIntOfDigits(_pinDigitCount));
+////      buffer.write('${random.randomIntOfDigits(_pinDigitCount)}, ');
+//    }
+//    print(buffer.toString());
+  }
+
+  /// Copies the current PIN to the clipboard.
+  ///
+  /// Called when the user taps the _Copy_ action button.
+  void _copyPIN() {
+    copyToClipboard(_scaffoldKey.currentState, _pin.toString());
   }
 
   @override
@@ -73,7 +88,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,8 +97,8 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.content_copy),
-            tooltip: 'Copy to clipboard',
-            onPressed: () => copyToClipboard(_scaffoldKey.currentState, _pin.toString()),
+            tooltip: Strings.copyTooltip,
+            onPressed: _copyPIN,
           ),
           PopupMenuButton<OverflowMenuItem>(
             onSelected: popupMenuSelection,
@@ -123,10 +137,9 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshPIN,
-        tooltip: 'Refresh',
+        tooltip: Strings.refreshTooltip,
         child: Icon(Icons.refresh),
       ),
     );
   }
-
 }

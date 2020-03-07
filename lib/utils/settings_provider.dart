@@ -12,7 +12,7 @@ class SettingsProvider {
 
   static Future<int> getPinDigitCount() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_pinDigitCountKey) ?? 4;
+    return (prefs.getInt(_pinDigitCountKey) ?? 4).clamp(1, 9);
   }
 
   static Future<void> setBackDigitCount(int value) async {

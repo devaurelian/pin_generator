@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -41,8 +40,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Text('Number of PIN digits'),
             Slider(
               min: 1,
-              max: 10,
-              divisions: 10,
+              max: 9,
+              divisions: 9,
               value: _pinDigitCount.toDouble(),
               label: _pinDigitCount.toString(),
               onChanged: (value) => setState(() {
