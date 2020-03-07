@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
+import 'package:pingenerator/utils/strings.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -7,8 +8,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  int _pinDigitCount = 4;
-  int _backDigitCount = 1000;
+  int _pinDigitCount = SettingsProvider.pinDigitCountDefault;
+  int _backDigitCount = SettingsProvider.backDigitCountDefault;
 
   @override
   void initState() {
@@ -30,18 +31,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(Strings.settingsTitle),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Number of PIN digits'),
+            Text(Strings.pinDigitCountSetting),
             Slider(
-              min: 1,
-              max: 9,
-              divisions: 9,
+              min: SettingsProvider.pinDigitCountMin.toDouble(),
+              max: SettingsProvider.pinDigitCountMax.toDouble(),
+              divisions: SettingsProvider.pinDigitCountMax,
               value: _pinDigitCount.toDouble(),
               label: _pinDigitCount.toString(),
               onChanged: (value) => setState(() {
@@ -50,11 +51,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }),
             ),
             SizedBox(height: 24),
-            Text('Number of background digits'),
+            Text(Strings.backDigitCountSetting),
             Slider(
-              min: 0,
-              max: 1000,
-              divisions: 1000,
+              min: SettingsProvider.backDigitCountMin.toDouble(),
+              max: SettingsProvider.backDigitCountMax.toDouble(),
+              divisions: SettingsProvider.backDigitCountMax,
               value: _backDigitCount.toDouble(),
               label: _backDigitCount.toString(),
               onChanged: (double value) {

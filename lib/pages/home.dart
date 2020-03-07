@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pingenerator/pages/settings.dart';
+import 'package:pingenerator/pages/settings_screen.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/utils/utils.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
@@ -36,13 +36,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _pin = random.nextIntOfDigits(_pinDigitCount);
     });
-
-//    final StringBuffer buffer = StringBuffer();
-//    for (var i = 0; i < 1000; i++) {
-//      print(random.nextIntOfDigits(_pinDigitCount));
-////      buffer.write('${random.randomIntOfDigits(_pinDigitCount)}, ');
-//    }
-//    print(buffer.toString());
   }
 
   /// Copies the current PIN to the clipboard.
