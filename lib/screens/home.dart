@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:pingenerator/screens/settings.dart';
 import 'package:pingenerator/utils/settings_provider.dart';
 import 'package:pingenerator/utils/utils.dart';
+import 'package:pingenerator/widgets/pin_text.dart';
 import 'package:pingenerator/widgets/random_digits.dart';
 import 'package:pingenerator/utils/strings.dart';
 import 'package:share/share.dart';
@@ -70,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Generates and displays a new PIN.
   ///
   /// Called on startup and when the user taps the floating action button.
-  void _refreshPIN() {
+  Future<void> _refreshPIN() async {
     setState(() {
       _pin = _randomGenerator.nextIntOfDigits(_pinDigitCount);
     });
@@ -166,11 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
             digitCount: _backDigitCount,
           ),
           Center(
-            child: Text(
-              _pin.toString(),
-              style: _pinDigitCount <= 5
-                  ? Theme.of(context).textTheme.display4
-                  : Theme.of(context).textTheme.display3,
+            child: PINText(
+              pin: _pin,
             ),
           ),
         ],

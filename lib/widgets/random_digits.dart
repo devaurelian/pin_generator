@@ -6,7 +6,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// A widget that displays random digits at random positions
+/// A widget that displays random digits at random positions.
 class RandomDigits extends StatelessWidget {
   /// The default number of digits.
   static const int defaultDigitCount = 100;
