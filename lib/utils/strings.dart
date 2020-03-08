@@ -20,7 +20,8 @@ class Strings {
   static const String settingsTitle = 'Settings';
   static const String pinDigitCountSetting = 'Number of PIN digits';
   static const String backDigitCountSetting = 'Number of background digits';
-  static const String useSecureRandomSetting =
+  static const String useSecureRandomSettingTitle = 'Secure random generator';
+  static const String useSecureRandomSettingSubtitle =
       'Use a cryptographically secure random number generator';
 
   static const String rateAppMenuItem = 'Rate app';

@@ -43,45 +43,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const EdgeInsets listTilePadding = EdgeInsets.all(16.0);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.settingsTitle),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        child: ListView(
-          children: <Widget>[
-            Text(Strings.pinDigitCountSetting),
-            Slider(
-              min: SettingsProvider.pinDigitCountMin.toDouble(),
-              max: SettingsProvider.pinDigitCountMax.toDouble(),
-              divisions: SettingsProvider.pinDigitCountMax -
-                  SettingsProvider.pinDigitCountMin,
-              value: _pinDigitCount.toDouble(),
-              label: _pinDigitCount.toString(),
-              onChanged: (value) => setState(() {
-                _pinDigitCount = value.round();
-                SettingsProvider.setPinDigitCount(_pinDigitCount);
-              }),
-            ),
-            SizedBox(height: 24),
-            Text(Strings.backDigitCountSetting),
-            Slider(
-              min: SettingsProvider.backDigitCountMin.toDouble(),
-              max: SettingsProvider.backDigitCountMax.toDouble(),
-              divisions: SettingsProvider.backDigitCountMax -
-                  SettingsProvider.backDigitCountMin,
-              value: _backDigitCount.toDouble(),
-              label: _backDigitCount.toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _backDigitCount = value.round();
-                  SettingsProvider.setBackDigitCount(_backDigitCount);
-                });
-              },
-            ),
+      body: ListView(
+        children: ListTile.divideTiles(
+          context: context,
+          tiles: [
             SwitchListTile(
-              title: const Text(Strings.useSecureRandomSetting),
+              contentPadding: listTilePadding,
+              title: const Text(Strings.useSecureRandomSettingTitle),
+              subtitle: const Text(Strings.useSecureRandomSettingSubtitle),
               value: _useSecureRandom,
               onChanged: (bool value) {
                 setState(() {
@@ -89,10 +64,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SettingsProvider.setUseSecureRandom(_useSecureRandom);
                 });
               },
-//              secondary: const Icon(Icons.shuffle),
-            )
+            ),
+            ListTile(
+              contentPadding: listTilePadding,
+              title: Text(Strings.pinDigitCountSetting),
+              subtitle: Slider(
+                min: SettingsProvider.pinDigitCountMin.toDouble(),
+                max: SettingsProvider.pinDigitCountMax.toDouble(),
+                divisions: SettingsProvider.pinDigitCountMax -
+                    SettingsProvider.pinDigitCountMin,
+                value: _pinDigitCount.toDouble(),
+                label: _pinDigitCount.toString(),
+                onChanged: (value) => setState(() {
+                  _pinDigitCount = value.round();
+                  SettingsProvider.setPinDigitCount(_pinDigitCount);
+                }),
+              ),
+            ),
+            ListTile(
+              contentPadding: listTilePadding,
+              title: Text(Strings.backDigitCountSetting),
+              subtitle: Slider(
+                min: SettingsProvider.backDigitCountMin.toDouble(),
+                max: SettingsProvider.backDigitCountMax.toDouble(),
+                divisions: SettingsProvider.backDigitCountMax -
+                    SettingsProvider.backDigitCountMin,
+                value: _backDigitCount.toDouble(),
+                label: _backDigitCount.toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _backDigitCount = value.round();
+                    SettingsProvider.setBackDigitCount(_backDigitCount);
+                  });
+                },
+              ),
+            ),
           ],
-        ),
+        ).toList(),
       ),
     );
   }
