@@ -77,6 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  /// Shows the _secure random is on_ message when the user taps the lock icon.
+  void _showSecureRandomOn() {
+    showSnackBar(_scaffoldKey.currentState, Strings.secureRandomTooltip);
+  }
+
   /// Shares the current PIN.
   ///
   /// Called when the user taps the _Share_ action button.
@@ -124,12 +129,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(widget.title),
         leading: _randomGenerator.isSecure
-            ? Tooltip(
-                message: Strings.secureRandomTooltip,
-                child: const Icon(Icons.enhanced_encryption),
+            ? IconButton(
+                icon: const Icon(Icons.enhanced_encryption),
+                onPressed: _showSecureRandomOn,
               )
             : null,
-//        titleSpacing: 0.0,
+        titleSpacing:
+            _randomGenerator.isSecure ? 0.0 : NavigationToolbar.kMiddleSpacing,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.share),

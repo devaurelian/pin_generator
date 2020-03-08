@@ -9,7 +9,7 @@ class Strings {
   static const String refreshTooltip = 'Generate new PIN';
 
   static const String secureRandomTooltip =
-      'Cryptographically secure random number generator';
+      'Yes, the secure random number generator is on!';
 
   static const String shareTooltip = 'Share';
   static const String shareSubject = 'Your new PIN';
