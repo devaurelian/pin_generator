@@ -26,7 +26,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final random = Random.secure();
+  /// The random number generator.
+  ///
+  /// By default create a pseudo-random generator, which does not throw errors.
+  Random _randomGenerator = Random();
 
   /// The current generated PIN.
   int _pin = 0;
@@ -36,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// The background digit count.
   int _backDigitCount = SettingsProvider.backDigitCountDefault;
+
+  /// Whether to use a secure random number generator.
+  bool _useSecureRandom = SettingsProvider.useSecureRandomDefault;
 
   /// The AppBar's action needs this key to find its own Scaffold.
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -52,6 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> loadSettingsAndRefresh() async {
     _pinDigitCount = await SettingsProvider.getPinDigitCount();
     _backDigitCount = await SettingsProvider.getBackDigitCount();
+    _useSecureRandom = await SettingsProvider.getUseSecureRandom();
+
+    // Create the random number generator
+    _randomGenerator = RandomX.create(secure: _useSecureRandom);
+
+    // Generate a new PIN
     _refreshPIN();
   }
 
@@ -60,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Called on startup and when the user taps the floating action button.
   void _refreshPIN() {
     setState(() {
-      _pin = random.nextIntOfDigits(_pinDigitCount);
+      _pin = _randomGenerator.nextIntOfDigits(_pinDigitCount);
     });
   }
 
@@ -110,6 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
+        leading: _randomGenerator.isSecure
+            ? Tooltip(
+                message: Strings.secureRandomTooltip,
+                child: const Icon(Icons.enhanced_encryption),
+              )
+            : null,
+//        titleSpacing: 0.0,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.share),
@@ -143,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: <Widget>[
           RandomDigits(
-            random: random,
+            random: _randomGenerator,
             digitCount: _backDigitCount,
           ),
           Center(

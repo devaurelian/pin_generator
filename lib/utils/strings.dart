@@ -6,6 +6,9 @@
 class Strings {
   static const String refreshTooltip = 'Generate new PIN';
 
+  static const String secureRandomTooltip =
+      'Cryptographically secure random number generator';
+
   static const String shareTooltip = 'Share';
   static const String shareSubject = 'Your new PIN';
 
@@ -17,9 +20,12 @@ class Strings {
   static const String settingsTitle = 'Settings';
   static const String pinDigitCountSetting = 'Number of PIN digits';
   static const String backDigitCountSetting = 'Number of background digits';
+  static const String useSecureRandomSetting =
+      'Use a cryptographically secure random number generator';
 
   static const String rateAppMenuItem = 'Rate app';
-  static const String rateAppURL = 'https://play.google.com/store/apps/details?id=com.anaurelian.pingenerator';
+  static const String rateAppURL =
+      'https://play.google.com/store/apps/details?id=com.anaurelian.pingenerator';
 
   static const String helpMenuItem = 'Help';
   static const String helpURL = 'https://anaurelian.com/pingenerator/';

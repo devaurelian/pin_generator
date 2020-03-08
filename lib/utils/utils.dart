@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:pingenerator/utils/strings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-extension RandomOfDigits on Random {
+extension RandomX on Random {
   /// Generates a non-negative random integer with a specified number of digits.
   ///
   /// Supports [digitCount] values between 1 and 9 inclusive.
@@ -18,6 +18,20 @@ extension RandomOfDigits on Random {
     int min = digitCount == 1 ? 0 : pow(10, digitCount - 1);
     int max = pow(10, digitCount);
     return min + nextInt(max - min);
+  }
+
+  /// Returns true if the random number generator is cryptographically secure.
+  bool get isSecure => runtimeType.toString() == '_SecureRandom';
+
+  static Random create({bool secure = true}) {
+    Random random;
+    try {
+      random = secure ? Random.secure() : Random();
+    } on UnsupportedError {
+      random = Random();
+    }
+
+    return random;
   }
 }
 

@@ -19,6 +19,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// The current background digit count setting value.
   int _backDigitCount = SettingsProvider.backDigitCountDefault;
 
+  /// The current secure Random setting value.
+  bool _useSecureRandom = SettingsProvider.useSecureRandomDefault;
+
   /// Load settings on [initState].
   @override
   void initState() {
@@ -30,9 +33,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> loadSettings() async {
     final int pinDigitCount = await SettingsProvider.getPinDigitCount();
     final int backDigitCount = await SettingsProvider.getBackDigitCount();
+    final bool useSecureRandom = await SettingsProvider.getUseSecureRandom();
     setState(() {
       _pinDigitCount = pinDigitCount;
       _backDigitCount = backDigitCount;
+      _useSecureRandom = useSecureRandom;
     });
   }
 
@@ -44,8 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: <Widget>[
             Text(Strings.pinDigitCountSetting),
             Slider(
@@ -76,6 +80,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 });
               },
             ),
+            SwitchListTile(
+              title: const Text(Strings.useSecureRandomSetting),
+              value: _useSecureRandom,
+              onChanged: (bool value) {
+                setState(() {
+                  _useSecureRandom = value;
+                  SettingsProvider.setUseSecureRandom(_useSecureRandom);
+                });
+              },
+//              secondary: const Icon(Icons.shuffle),
+            )
           ],
         ),
       ),

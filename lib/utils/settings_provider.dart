@@ -16,9 +16,13 @@ class SettingsProvider {
   static const int backDigitCountMax = 1000;
   static const int backDigitCountDefault = 100;
 
+  /// The default value for the secure random setting.
+  static const bool useSecureRandomDefault = true;
+
   /// Persistent storage keys.
   static final String _pinDigitCountKey = 'pin_digit_count';
   static final String _backDigitCountKey = 'background_digit_count';
+  static final String _useSecureRandomKey = 'use_secure_random';
 
   /// Saves the PIN digit count setting [value] to persistent storage.
   static Future<void> setPinDigitCount(int value) async {
@@ -48,5 +52,19 @@ class SettingsProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return (prefs.getInt(_backDigitCountKey) ?? backDigitCountDefault)
         .clamp(backDigitCountMin, backDigitCountMax);
+  }
+
+  /// Saves the secure random setting [value] to persistent storage.
+  static Future<void> setUseSecureRandom(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_useSecureRandomKey, value);
+  }
+
+  /// Reads the secure random setting value from persistent storage.
+  ///
+  /// Ensures a default value.
+  static Future<bool> getUseSecureRandom() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_useSecureRandomKey) ?? useSecureRandomDefault;
   }
 }
