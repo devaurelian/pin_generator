@@ -54,6 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           context: context,
           tiles: [
             SwitchListTile(
+              activeColor: Theme.of(context).primaryColor,
               contentPadding: listTilePadding,
               title: const Text(Strings.useSecureRandomSettingTitle),
               subtitle: const Text(Strings.useSecureRandomSettingSubtitle),
@@ -69,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               contentPadding: listTilePadding,
               title: Text(Strings.pinDigitCountSetting),
               subtitle: Slider(
+//                activeColor: Theme.of(context).accentColor,
                 min: SettingsProvider.pinDigitCountMin.toDouble(),
                 max: SettingsProvider.pinDigitCountMax.toDouble(),
                 divisions: SettingsProvider.pinDigitCountMax -
@@ -85,6 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               contentPadding: listTilePadding,
               title: Text(Strings.backDigitCountSetting),
               subtitle: Slider(
+//                activeColor: Theme.of(context).accentColor,
                 min: SettingsProvider.backDigitCountMin.toDouble(),
                 max: SettingsProvider.backDigitCountMax.toDouble(),
                 divisions: SettingsProvider.backDigitCountMax -

@@ -4,6 +4,8 @@
 
 /// User interface string resources.
 class Strings {
+  static const String appName = 'PIN Generator';
+
   static const String refreshTooltip = 'Generate new PIN';
 
   static const String secureRandomTooltip =
